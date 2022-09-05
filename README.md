@@ -1,2 +1,2 @@
 # ignews
-Baseado no curso da rocketseat
+## Baseado no curso da rocketseat
