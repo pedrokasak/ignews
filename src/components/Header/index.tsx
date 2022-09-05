@@ -1,5 +1,6 @@
-import styles from './Header/styles.module.scss';
+import styles from './styles.module.scss';
 import Image from 'next/image';
+import { SingInButton } from '../SignInButton';
 
 export function Header () {
     return(
@@ -14,6 +15,7 @@ export function Header () {
                     <a className={styles.active}>Home</a>
                     <a>Posts</a>
                 </nav>
+                <SingInButton />
             </div>
         </header>
     );
