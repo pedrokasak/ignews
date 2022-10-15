@@ -13,7 +13,7 @@ export function Header () {
                 height="31" />
                 <nav>
                     <a className={styles.active}>Home</a>
-                    <a>Posts</a>
+                    <a href='#'>Posts</a>
                 </nav>
                 <SingInButton />
             </div>

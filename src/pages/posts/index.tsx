@@ -1,11 +1,21 @@
 
-import { GetStaticProps } from 'next';
 import Head from 'next/head';
-import Prismic from '@prismicio/client';
-import getPrismicClient from '../../services/prismic';
 import styles from'./styles.module.scss';
+import { getPrismicClient } from '../../services/prismic';
+import { RichText } from 'prismic-dom';
 
-export default function Posts() {
+type Post = {
+    slug: string;
+    title: string;
+    excerpt: string;
+    updatedAt: string;
+}
+interface PostsProps {
+    posts: Post[]
+}
+
+
+export default function Posts({ posts }: PostsProps) {
     return(
         <>
         <Head>
@@ -13,30 +23,15 @@ export default function Posts() {
         </Head>
         <main className={styles.container}>
             <div className={styles.posts}>
-                <a href="">
-                    <time>12 de outubro de 2022</time>
-                    <strong>Creating a Monorepo with Lerna & Yarn Workspace</strong>
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
-                        Sapiente quidem deleniti nisi aspernatur repudiandae explicabo aliquam enim quae, 
-                        ducimus ratione est alias asperiores sit, nostrum similique velit exercitationem voluptatibus natus.
+                {posts.map(post =>(
+                    <a  key={post.slug} href="#">
+                    <time>{post.updatedAt}</time>
+                    <strong>{post.title}</strong>
+                    <p>{post.excerpt}
                     </p>
                 </a>
-                <a href="#">
-                    <time>12 de outubro de 2022</time>
-                    <strong>Creating a Monorepo with Lerna & Yarn Workspace</strong>
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
-                        Sapiente quidem deleniti nisi aspernatur repudiandae explicabo aliquam enim quae, 
-                        ducimus ratione est alias asperiores sit, nostrum similique velit exercitationem voluptatibus natus.
-                    </p>
-                </a>
-                <a href="">
-                    <time>12 de outubro de 2022</time>
-                    <strong>Creating a Monorepo with Lerna & Yarn Workspace</strong>
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
-                        Sapiente quidem deleniti nisi aspernatur repudiandae explicabo aliquam enim quae, 
-                        ducimus ratione est alias asperiores sit, nostrum similique velit exercitationem voluptatibus natus.
-                    </p>
-                </a>
+                ))}
+                
             </div>
         </main>
         
@@ -44,19 +39,29 @@ export default function Posts() {
     );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export async function getServerSideProps() {
     const prismic = getPrismicClient()
 
-    const response = await prismic.query([
-        Prismic.predicates.at('document.type', 'publication')
-    ], {
-        fetch: ['publication.title', 'publication.content'],
+    const response = await prismic.getByType("posts", {
         pageSize: 10,
-    })
+      });
 
     console.log(JSON.stringify(response, null, 2))
 
+    const posts = response.results.map(post => {
+        return {
+            slug: post.uid,
+            title: post.data.title,
+            excerpt: post.data.content.find(content => content.type === 'paragraph')?.text ?? '',
+            updatedAt: new Date(post.last_publication_date).toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            })
+        }
+    });
+
     return {
-        props: { response }
+        props: { posts }
     }
 }

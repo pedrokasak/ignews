@@ -1,0 +1,24 @@
+{
+  "id": "mock-doc-id",
+  "url": null,
+  "type": "posts",
+  "href": null,
+  "tags": [],
+  "first_publication_date": "1970-01-01T00:00:01+0000",
+  "last_publication_date": "1970-01-01T00:00:01+0000",
+  "slugs": [],
+  "linked_documents": [],
+  "lang": "en-us",
+  "alternate_languages": [],
+  "data": {
+    "title": "both",
+    "content": [
+      {
+        "type": "paragraph",
+        "text": "Est mollit fugiat ad nulla officia aute non laboris eu aliqua velit nisi. Tempor pariatur ea proident reprehenderit anim qui exercitation non occaecat culpa. Voluptate do est dolore pariatur minim cupidatat nulla deserunt cillum velit.",
+        "spans": []
+      }
+    ],
+    "slices": []
+  }
+}
